@@ -31,20 +31,28 @@ src/components/
 
 Chaque composant est placé dans le sous-dossier correspondant à son domaine plutôt qu'à la racine de `components/`.
 
-### Primitives de layout : Container et Section
+### Primitives de layout : Container, Section, Stack, Grid
 
-`Container` et `Section` (`src/components/layout/`) sont deux primitives indépendantes avec des responsabilités distinctes :
+`Container`, `Section`, `Stack` et `Grid` (`src/components/layout/`) sont quatre primitives indépendantes, chacune avec une responsabilité unique et minimale :
 
 - `Container` : largeur max et padding horizontal. Ne porte aucune sémantique (rend un `<div>`).
 - `Section` : rythme vertical entre blocs de page et sémantique (rend un `<section>`). Ne gère pas la largeur/le padding horizontal.
+- `Stack` : pose uniquement `display: flex` (rend un `<div>`). Direction, gap, wrap et alignement passent entièrement par `className`.
+- `Grid` : pose uniquement `display: grid` (rend un `<div>`). Colonnes, gap et responsive passent entièrement par `className`.
 
-`Section` n'intègre pas `Container` automatiquement. La composition standard pour un bloc de page est :
+Aucune de ces primitives n'intègre les autres automatiquement — elles se composent manuellement dans les pages/composants consommateurs. Exemple :
 
 ```tsx
 <Section>
-  <Container>{/* contenu */}</Container>
+  <Container>
+    <Grid className="grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
+      {/* contenu */}
+    </Grid>
+  </Container>
 </Section>
 ```
+
+Ces primitives restent volontairement de très petites briques et ne reproduisent aucune fonctionnalité déjà couverte par les utilitaires Tailwind (`gap-*`, `grid-cols-*`, `items-*`, `justify-*`, `flex-row`/`flex-col`, etc.) : aucune prop `direction`, `gap`, `columns`, `wrap`, `align` ou `justify` n'est ajoutée sur `Stack`/`Grid`. Toute variante de ce type se règle via `className`.
 
 ## Règles React / Next.js
 
