@@ -31,6 +31,21 @@ src/components/
 
 Chaque composant est placé dans le sous-dossier correspondant à son domaine plutôt qu'à la racine de `components/`.
 
+### Primitives de layout : Container et Section
+
+`Container` et `Section` (`src/components/layout/`) sont deux primitives indépendantes avec des responsabilités distinctes :
+
+- `Container` : largeur max et padding horizontal. Ne porte aucune sémantique (rend un `<div>`).
+- `Section` : rythme vertical entre blocs de page et sémantique (rend un `<section>`). Ne gère pas la largeur/le padding horizontal.
+
+`Section` n'intègre pas `Container` automatiquement. La composition standard pour un bloc de page est :
+
+```tsx
+<Section>
+  <Container>{/* contenu */}</Container>
+</Section>
+```
+
 ## Règles React / Next.js
 
 - Server Components par défaut.

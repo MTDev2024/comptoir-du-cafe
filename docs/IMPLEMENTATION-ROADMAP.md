@@ -28,7 +28,7 @@
 ## Phase 2 — UI foundation
 
 - [x] Container
-- [ ] Section
+- [x] Section
 - [ ] Stack / Grid
 - [ ] Button / Link
 - [ ] form controls
@@ -39,7 +39,7 @@
 
 **Critère :** système UI cohérent et accessible.
 
-**État : en cours.** `Container` implémenté (`src/components/layout/Container.tsx`) et vérifié (`npm run lint`, `npm run typecheck`, `npm run build`). Autres éléments non commencés. Détails dans [`CURRENT-STATE.md`](./CURRENT-STATE.md).
+**État : en cours.** `Container` et `Section` implémentés (`src/components/layout/`) et vérifiés (`npm run lint`, `npm run typecheck`, `npm run build`). Autres éléments non commencés. Détails dans [`CURRENT-STATE.md`](./CURRENT-STATE.md).
 
 ## Phase 3 — PrestaShop integration
 
