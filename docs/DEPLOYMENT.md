@@ -64,3 +64,5 @@ Les variables exactes seront complétées lors de l'implémentation des clients 
 - branches courtes `feature/*`, `fix/*`
 - commits de type `feat`, `fix`, `refactor`, `docs`, `test`
 - tags de version importants selon SemVer
+- aucune mention d'outil ou d'assistant IA (Claude, Claude Code, ChatGPT, Gemini ou autre) dans les messages de commit, y compris en co-auteur (`Co-Authored-By`)
+- aucun committer/auteur autre que le porteur du projet sur les commits

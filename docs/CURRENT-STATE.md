@@ -42,6 +42,7 @@ Aucune — Phase 1 validée, documentation intégrée. En attente de retour avan
 - Design tokens implémentés via `@theme inline` de Tailwind v4 dans `globals.css`, avec séparation entre variables de palette brute (`--palette-*`) et variables sémantiques (`--background`, `--foreground`, `--primary`, etc.), afin d'éviter toute collision de nommage avec les tokens `--color-*` générés par Tailwind.
 - `src/config/site.ts` créé comme unique source de vérité pour la configuration statique du site, conformément à `ARCHITECTURE.md`.
 - Les SVG placeholders par défaut de `create-next-app` (logos Vercel/Next.js) ont été supprimés de `public/`, n'ayant aucun rapport avec le projet.
+- Règle Git validée : aucune mention d'outil/assistant IA dans les messages de commit (y compris `Co-Authored-By`), aucun committer/auteur autre que le porteur du projet. Documentée dans `AGENTS.md` et `DEPLOYMENT.md`.
 - Les fichiers `AGENTS.md` et `CLAUDE.md` générés automatiquement par `next dev` sont conservés : le bloc `<!-- BEGIN:nextjs-agent-rules -->` de `AGENTS.md` est régénéré par Next.js et ne doit pas être considéré comme de la documentation projet ; le contexte projet a été ajouté au-dessus de ce bloc.
 - L'ensemble des documents `docs/` (y compris ceux non explicitement modifiés en Phase 1, comme `DATA-MODELS.md`, `DEPLOYMENT.md`, `INTEGRATIONS.md`, `ROUTES.md`, `TESTING.md`, `UI-DESIGN-SYSTEM.md`) a été copié tel quel depuis le dépôt de documentation source, sans modification de fond, pour que le dépôt applicatif soit autoporteur.
 

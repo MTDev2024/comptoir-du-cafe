@@ -27,6 +27,7 @@ Voir `docs/LOCAL-DEVELOPMENT.md`. En résumé :
 - Pas de NextAuth/Auth.js pour dupliquer l'identité client (PrestaShop fait foi).
 - Server Components par défaut, `"use client"` uniquement si nécessaire.
 - Secrets côté serveur uniquement ; jamais commités.
+- Aucune mention d'outil ou d'assistant IA (Claude, Claude Code, ChatGPT, Gemini ou autre) dans les messages de commit, y compris en co-auteur (`Co-Authored-By`). Aucun committer/auteur autre que le porteur du projet.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
