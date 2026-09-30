@@ -4,7 +4,7 @@ Dernière mise à jour : 2026-10-01.
 
 ## Phase actuelle
 
-**Phase 1 — Fondation Next.js : validée.** Le dépôt applicatif intègre désormais l'ensemble de la documentation projet (`AGENTS.md`, `README.md`, `docs/`) comme source de vérité, afin que le développement puisse reprendre dans une nouvelle conversation sans perte de contexte. La Phase 2 n'a pas démarré.
+**Phase 2 — UI foundation : en cours.** Phase 1 validée (commit de référence `ccb1b31c5dc3a8c212cc5ed91fe41eb04ca4e8f9`). Premier composant de la Phase 2 (`Container`) implémenté et vérifié ; les autres éléments de la phase (Section, Stack/Grid, Button/Link, form controls, Alert/Toast/Modal/Drawer, Breadcrumbs, Skeleton/EmptyState, Header/Footer) restent à faire.
 
 ## Étapes terminées
 
@@ -19,6 +19,9 @@ Dernière mise à jour : 2026-10-01.
   - Structure `src/` complète : `app/`, `actions/`, `components/`, `config/`, `lib/`, `types/`, `styles/`
   - `src/config/site.ts` créé comme source de vérité de la configuration statique du site
   - Page d'accueil minimale de validation (remplace le boilerplate Next.js par défaut)
+- **Phase 2 — UI foundation (en cours)** :
+  - Structure de sous-dossiers `src/components/{ui,layout,navigation,commerce,blog,workshops,finder,reviews,gallery,sections}/` créée
+  - `Container` implémenté (`src/components/layout/Container.tsx`) : wrapper de layout (`<div>` simple, sans sémantique), largeur max 1440px, padding horizontal responsive (20/32/48/64px), props minimales (`children`, `className` optionnel)
 
 ## Vérifications effectuées
 
@@ -27,14 +30,15 @@ Dernière mise à jour : 2026-10-01.
 - `npm run build` → succès (2 routes statiques générées)
 - `npm run dev` → serveur démarré, `GET /` → 200
 - Diff entre `docs/` du dépôt applicatif et `docs/` du dépôt de documentation source (`comptoir-du-cafe-documentation-v1`) : contenu identique, seules des différences de formatage Prettier (tableaux Markdown reflowés, points-virgules ajoutés aux blocs TypeScript de `DATA-MODELS.md`) — aucune décision ni contenu modifié.
+- Après ajout de `Container` : `npm run lint` → 0 erreur, `npm run typecheck` → 0 erreur, `npm run build` → succès.
 
 ## Étape en cours
 
-Aucune — Phase 1 validée, documentation intégrée. En attente de retour avant de démarrer la Phase 2.
+Phase 2 — UI foundation : `Container` livré. Prochain élément non commencé : `Section`.
 
 ## Prochaine étape
 
-**Phase 2 — UI foundation** (Container, Section, Stack/Grid, Button/Link, form controls, Alert/Toast/Modal/Drawer, Breadcrumbs, Skeleton/EmptyState, Header/Footer), à ne démarrer qu'après validation explicite, conformément à la règle de progression de [`IMPLEMENTATION-ROADMAP.md`](./IMPLEMENTATION-ROADMAP.md).
+`Section` (élément suivant de la Phase 2 dans [`IMPLEMENTATION-ROADMAP.md`](./IMPLEMENTATION-ROADMAP.md)), à ne démarrer qu'après validation explicite.
 
 ## Décisions importantes prises
 
@@ -43,6 +47,8 @@ Aucune — Phase 1 validée, documentation intégrée. En attente de retour avan
 - `src/config/site.ts` créé comme unique source de vérité pour la configuration statique du site, conformément à `ARCHITECTURE.md`.
 - Les SVG placeholders par défaut de `create-next-app` (logos Vercel/Next.js) ont été supprimés de `public/`, n'ayant aucun rapport avec le projet.
 - Règle Git validée : aucune mention d'outil/assistant IA dans les messages de commit (y compris `Co-Authored-By`), aucun committer/auteur autre que le porteur du projet. Documentée dans `AGENTS.md` et `DEPLOYMENT.md`.
+- Organisation de `src/components/` validée en sous-dossiers par domaine (`ui/`, `layout/`, `navigation/`, `commerce/`, `blog/`, `workshops/`, `finder/`, `reviews/`, `gallery/`, `sections/`), documentée dans `TECHNICAL-SPEC.md`.
+- `Container` : API minimale (`children`, `className` optionnel), pas de prop `size`/`as`. Rend un `<div>` simple, sans responsabilité sémantique — la sémantique est portée par les composants qui l'utilisent (notamment `Section`, à venir).
 - Les fichiers `AGENTS.md` et `CLAUDE.md` générés automatiquement par `next dev` sont conservés : le bloc `<!-- BEGIN:nextjs-agent-rules -->` de `AGENTS.md` est régénéré par Next.js et ne doit pas être considéré comme de la documentation projet ; le contexte projet a été ajouté au-dessus de ce bloc.
 - L'ensemble des documents `docs/` (y compris ceux non explicitement modifiés en Phase 1, comme `DATA-MODELS.md`, `DEPLOYMENT.md`, `INTEGRATIONS.md`, `ROUTES.md`, `TESTING.md`, `UI-DESIGN-SYSTEM.md`) a été copié tel quel depuis le dépôt de documentation source, sans modification de fond, pour que le dépôt applicatif soit autoporteur.
 
@@ -76,13 +82,13 @@ Aucun blocage identifié à ce stade.
 
 Aucun écart de fond identifié : rien dans le code de la Phase 1 ne contredit une décision documentée. Les lignes ci-dessous listent les domaines documentés mais pas encore implémentés — normal à ce stade, chacun étant rattaché à une phase ultérieure de [`IMPLEMENTATION-ROADMAP.md`](./IMPLEMENTATION-ROADMAP.md).
 
-| Domaine documenté                                                                       | État d'implémentation                                                                                                            |
-| --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Structure `src/` ([`TECHNICAL-SPEC.md`](./TECHNICAL-SPEC.md))                           | Squelette créé (`app`, `actions`, `components`, `config`, `lib`, `types`, `styles`), dossiers vides hors `app/` et `config/`     |
-| Design tokens / fonts ([`UI-DESIGN-SYSTEM.md`](./UI-DESIGN-SYSTEM.md))                  | Palette, sémantique, typographie, espacements, radius et motion traduits en tokens CSS/Tailwind ; fonts Fraunces/Inter branchées |
-| Configuration statique (`src/config/site.ts`) ([`ARCHITECTURE.md`](./ARCHITECTURE.md))  | Créé avec les champs de base (name, description, locale, url)                                                                    |
-| Composants UI de base ([`UI-DESIGN-SYSTEM.md`](./UI-DESIGN-SYSTEM.md), Phase 2)         | Non implémentés — prévu en Phase 2                                                                                               |
-| PrestaShop adapter (`src/lib/prestashop/`) ([`TECHNICAL-SPEC.md`](./TECHNICAL-SPEC.md)) | Non implémenté — prévu en Phase 3                                                                                                |
-| Server Actions (`src/actions/cart.ts`, `customer.ts`)                                   | Non implémentées — dossier `actions/` vide, prévu en Phase 5/6                                                                   |
-| Pages catalogue, panier, checkout, blog, ateliers, Finder                               | Non implémentées — prévues à partir de la Phase 4                                                                                |
-| Tests (unitaires, composants, intégration, Playwright) ([`TESTING.md`](./TESTING.md))   | Non implémentés — prévus en Phase 12                                                                                             |
+| Domaine documenté                                                                       | État d'implémentation                                                                                                                                                                                                                                                                                                                                             |
+| --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Structure `src/` ([`TECHNICAL-SPEC.md`](./TECHNICAL-SPEC.md))                           | Squelette créé (`app`, `actions`, `components`, `config`, `lib`, `types`, `styles`) ; `components/` sous-structuré en `ui/`, `layout/`, `navigation/`, `commerce/`, `blog/`, `workshops/`, `finder/`, `reviews/`, `gallery/`, `sections/` ; `layout/` contient `Container.tsx`, les autres sous-dossiers et `actions/`, `lib/`, `types/`, `styles/` restent vides |
+| Design tokens / fonts ([`UI-DESIGN-SYSTEM.md`](./UI-DESIGN-SYSTEM.md))                  | Palette, sémantique, typographie, espacements, radius et motion traduits en tokens CSS/Tailwind ; fonts Fraunces/Inter branchées                                                                                                                                                                                                                                  |
+| Configuration statique (`src/config/site.ts`) ([`ARCHITECTURE.md`](./ARCHITECTURE.md))  | Créé avec les champs de base (name, description, locale, url)                                                                                                                                                                                                                                                                                                     |
+| Composants UI de base ([`UI-DESIGN-SYSTEM.md`](./UI-DESIGN-SYSTEM.md), Phase 2)         | `Container` implémenté ; Section, Stack/Grid, Button/Link, form controls, Alert/Toast/Modal/Drawer, Breadcrumbs, Skeleton/EmptyState, Header/Footer non implémentés — Phase 2 en cours                                                                                                                                                                            |
+| PrestaShop adapter (`src/lib/prestashop/`) ([`TECHNICAL-SPEC.md`](./TECHNICAL-SPEC.md)) | Non implémenté — prévu en Phase 3                                                                                                                                                                                                                                                                                                                                 |
+| Server Actions (`src/actions/cart.ts`, `customer.ts`)                                   | Non implémentées — dossier `actions/` vide, prévu en Phase 5/6                                                                                                                                                                                                                                                                                                    |
+| Pages catalogue, panier, checkout, blog, ateliers, Finder                               | Non implémentées — prévues à partir de la Phase 4                                                                                                                                                                                                                                                                                                                 |
+| Tests (unitaires, composants, intégration, Playwright) ([`TESTING.md`](./TESTING.md))   | Non implémentés — prévus en Phase 12                                                                                                                                                                                                                                                                                                                              |

@@ -13,6 +13,24 @@ src/
 └── styles/
 ```
 
+## Organisation de `src/components/`
+
+```text
+src/components/
+├── ui/           # composants de base (Button, Input, Badge, Alert, Modal, …)
+├── layout/       # primitives de layout (Container, Section, Stack, Grid)
+├── navigation/   # Header, Footer, Breadcrumbs, menus
+├── commerce/     # ProductCard, CartDrawer, VariantSelector, …
+├── blog/         # composants liés aux articles Decap
+├── workshops/    # composants liés aux ateliers Cal.com
+├── finder/       # composants du Coffee Finder
+├── reviews/      # composants d'affichage des avis
+├── gallery/      # composants de galerie image
+└── sections/     # sections de page composées (Hero, etc.)
+```
+
+Chaque composant est placé dans le sous-dossier correspondant à son domaine plutôt qu'à la racine de `components/`.
+
 ## Règles React / Next.js
 
 - Server Components par défaut.
