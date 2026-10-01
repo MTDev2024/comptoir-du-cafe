@@ -94,6 +94,28 @@ Fond teinté à faible opacité (`bg-{variant}/10`) + bordure gauche 4px pleine 
 
 **Accessibilité : `Alert` n'impose aucun rôle ARIA.** Ni `role="alert"` ni `role="status"` ne sont appliqués automatiquement selon la variante — le passthrough des attributs natifs (`ComponentPropsWithoutRef<"div">`) permet au consommateur de poser explicitement le rôle approprié à son contexte d'usage (`role="alert"`, `role="status"`, ou aucun rôle pour un message purement visuel/persistant). Ce choix est volontaire : `Alert` ne peut pas savoir, depuis le composant lui-même, si une instance donnée est statique au chargement de la page ou injectée dynamiquement — seul le consommateur connaît ce contexte.
 
+### Toast : notification transitoire
+
+`Toast` (`src/components/ui/Toast.tsx`) affiche une notification transitoire, pilotée entièrement par le consommateur :
+
+```ts
+type ToastVariant = "info" | "success" | "warning" | "error";
+
+type ToastProps = ComponentPropsWithoutRef<"div"> & {
+  open: boolean;
+  variant?: ToastVariant; // défaut "info"
+  onClose?: () => void;
+};
+```
+
+Mêmes 4 tokens de variante que `Alert` (fond teinté faible opacité + bordure gauche 4px), présentation plus compacte (padding réduit, texte `text-body-sm`). `open=false` → le composant retourne `null` : pas d'animation de sortie, pas de système de présence. **Aucune animation en V1** (ni en entrée, ni en sortie) — `globals.css` n'est pas modifié pour `Toast`.
+
+Contrairement à `Alert` et `Button`, `Toast` porte la directive `"use client"` — exception justifiée uniquement par le bouton de fermeture qui attache un `onClick` à un élément DOM natif (nécessite l'hydratation). Aucun hook, aucun état interne, aucun timer, aucune fermeture automatique : `open`/`onClose` restent entièrement contrôlés par le consommateur. Pas de `ToastProvider`, pas de `ToastViewport`, pas de Context API, pas de store, pas de portail, aucune dépendance externe.
+
+Le bouton de fermeture (`<button type="button">` natif, `aria-label="Fermer"`) n'est rendu que si `onClose` est fourni. Il n'est **pas** construit à partir du composant `Button` existant : `Button` ne supporte volontairement pas `onClick` (décision Phase 2), et cette décision n'est pas remise en cause pour résoudre le cas de `Toast` — `Toast` définit son propre bouton minimal, local, non réutilisable ailleurs.
+
+**Accessibilité** : `role="status"` par défaut (destructuré avec valeur par défaut, donc surchargeable explicitement si le consommateur passe son propre `role`). Aucun `aria-live` ajouté en plus de `role="status"` (redondant, le rôle porte déjà une sémantique live implicite). Pas de focus automatique à l'apparition. **Limitation V1 assumée et documentée** : `role="status"` ne garantit pas une annonce fiable par tous les lecteurs d'écran dans tous les contextes, car cette V1 ne fournit pas de région live persistante (`ToastViewport`) — un nœud `role="status"` inséré d'un coup dans le DOM avec son contenu déjà final n'est pas toujours annoncé de façon cohérente d'un lecteur d'écran à l'autre. Résoudre ce point nécessiterait une région live persistante, explicitement hors périmètre de cette étape.
+
 ## Règles React / Next.js
 
 - Server Components par défaut.
