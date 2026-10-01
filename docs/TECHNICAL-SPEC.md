@@ -61,6 +61,25 @@ Ces primitives restent volontairement de très petites briques et ne reproduisen
 - `Button` = **action** (soumission de formulaire, déclenchement côté client). Rend un `<button>`. Deux variantes seulement : `primary` (fond `primary`/texte `primary-foreground`) et `accent` (fond `accent`/texte `accent-foreground`). Pas de prop `size`, pas de prop `onClick`, pas de prop polymorphique, pas de slot icône dédié. `disabled` utilise l'attribut natif ; `loading` ajoute `aria-busy` et désactive le bouton. Reste un Server Component (pas de `"use client"`) : il ne porte aucune logique interactive propre. Les interactions client (gestion de `onClick`, état, etc.) sont portées par les composants clients qui utilisent `Button`, pas par `Button` lui-même.
 - `Link` = **navigation**. Rend `next/link` pour les destinations internes (`href` commençant par `/` ou `#`), un `<a>` natif pour tout le reste (externe, `mailto:`, `tel:`, etc.). Pas de prop `variant`, `size`, `external` ou `openInNewTab` ; aucune apparence de bouton. N'ajoute jamais `target="_blank"` automatiquement. Si un usage futur a besoin de `target="_blank"`, une indication accessible de l'ouverture dans un nouvel onglet doit l'accompagner (non implémenté tant qu'aucun besoin réel n'existe, car l'API actuelle de `Link` ne porte pas de prop `target`).
 
+### Form controls : Input, Select, Checkbox, Radio, FormField
+
+`Input`, `Select`, `Checkbox`, `Radio` (`src/components/ui/`) sont de simples wrappers stylés autour de leur élément HTML natif respectif. Leur API est un **passthrough des attributs natifs** (`ComponentPropsWithoutRef<"input"|"select">` + `className`) : `value`, `defaultValue`, `onChange`, `disabled`, `name`, `placeholder`, `required`, etc. ne sont pas réinventés. Aucun état interne, aucun hook, aucun `"use client"`. `Select` reste un `<select>` natif (pas de listbox personnalisée). `Checkbox` ne supporte pas `indeterminate`. `Radio` reste un contrôle individuel ; aucun `RadioGroup`/`fieldset` n'est implémenté à ce stade.
+
+`FormField` (`src/components/ui/FormField.tsx`) associe un label, une description optionnelle et un message d'erreur optionnel à **un** contrôle passé en `children` :
+
+```ts
+type FormFieldProps = {
+  id: string; // requis, aucune génération automatique (pas de useId())
+  label: string;
+  description?: string;
+  error?: string; // chaîne uniquement
+  required?: boolean;
+  children: ReactNode;
+};
+```
+
+`FormField` n'injecte aucune prop dans `children` (pas de `cloneElement`) : le câblage `aria-describedby`/`aria-invalid` entre le contrôle et les ids déterministes `${id}-description`/`${id}-error` reste **explicite, à la charge du consommateur**. `required` est reflété à la fois par l'attribut natif sur le contrôle et par une indication visuelle dans `FormField`. Aucun `"use client"`, aucune validation métier, aucune gestion d'état de formulaire : ces composants restent des wrappers UI purs. La validation (Zod), les Server Actions et la soumission restent hors de ces composants.
+
 ## Règles React / Next.js
 
 - Server Components par défaut.
