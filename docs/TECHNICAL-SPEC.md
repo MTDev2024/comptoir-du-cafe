@@ -116,6 +116,34 @@ Le bouton de fermeture (`<button type="button">` natif, `aria-label="Fermer"`) n
 
 **Accessibilité** : `role="status"` par défaut (destructuré avec valeur par défaut, donc surchargeable explicitement si le consommateur passe son propre `role`). Aucun `aria-live` ajouté en plus de `role="status"` (redondant, le rôle porte déjà une sémantique live implicite). Pas de focus automatique à l'apparition. **Limitation V1 assumée et documentée** : `role="status"` ne garantit pas une annonce fiable par tous les lecteurs d'écran dans tous les contextes, car cette V1 ne fournit pas de région live persistante (`ToastViewport`) — un nœud `role="status"` inséré d'un coup dans le DOM avec son contenu déjà final n'est pas toujours annoncé de façon cohérente d'un lecteur d'écran à l'autre. Résoudre ce point nécessiterait une région live persistante, explicitement hors périmètre de cette étape.
 
+### Modal : boîte de dialogue native
+
+`Modal` (`src/components/ui/Modal.tsx`) s'appuie sur l'élément HTML natif `<dialog>` et sa méthode `.showModal()`, plutôt que sur un `<div>` + ARIA manuel :
+
+```ts
+type ModalProps = Omit<ComponentPropsWithoutRef<"dialog">, "open" | "onClose"> & {
+  open: boolean;
+  onClose: () => void;
+  heading?: string;
+};
+```
+
+**Pourquoi `<dialog>` natif** : focus trap, focus initial et restauration du focus sont gérés **nativement** par `showModal()`/`close()` — aucun focus trap fait maison, aucune dépendance de focus management (`focus-trap-react`, Radix, etc.). `createPortal` n'est pas utilisé : les dialogs ouverts via `showModal()` sont rendus par le navigateur dans le "top layer", au-dessus de tout, sans dépendre d'un portail React — ce qui élimine aussi tout risque de mismatch SSR/hydratation (le `<dialog>` se SSR comme un élément HTML normal ; seuls les appels impératifs `showModal()`/`close()` vivent dans un `useEffect` côté client).
+
+**Pourquoi `Omit<..., "open" | "onClose">`** : `open` est un attribut natif de `<dialog>` (différent de notre prop contrôlée — ne doit jamais être transmis tel quel, sous peine de produire un dialog _non modal_, sans aucun des comportements natifs). `onClose` est une prop contrôlée gérée entièrement par le composant (écoute de l'événement natif `close`), pas un passthrough direct. `heading` remplace `title` pour éviter la collision avec l'attribut HTML global `title` (infobulle), de sens totalement différent.
+
+**Fonctionnement showModal/close** : un seul `useEffect` synchronise la prop `open` avec l'état natif du dialog (`dialog.showModal()` si `open && !dialog.open`, `dialog.close()` si `!open && dialog.open` — jamais d'appel redondant). Un second `useEffect` écoute l'événement natif `close` et appelle `onClose()` — **point d'entrée unique** : Escape (comportement natif du `<dialog>`), le bouton de fermeture et le clic sur le backdrop appellent tous `dialog.close()` plutôt que `onClose()` directement, garantissant une synchronisation cohérente dans tous les cas.
+
+**Backdrop** : détection par comparaison `event.target === dialogRef.current` sur le `onClick` du `<dialog>` lui-même (un clic dans le contenu interne a un `target` différent, donc ne ferme pas).
+
+**Bouton de fermeture** : `<button type="button">` natif local, `aria-label="Fermer"`, non construit à partir de `Button` (même raison que pour `Toast` : `Button` ne supporte volontairement pas `onClick`).
+
+**Scroll lock** : inclus en V1. À l'ouverture, verrouille `document.body.style.overflow` et compense la largeur de la scrollbar (`window.innerWidth - document.documentElement.clientWidth`) via `padding-right`, uniquement si nécessaire. Les valeurs inline précédentes sont conservées et restaurées exactement à la fermeture/au démontage (pas de système global de scroll lock — à réexaminer seulement si `Drawer` en révèle un besoin réel).
+
+**ARIA** : `role="dialog"` (explicite, bien qu'implicite sur `<dialog>`, pour une robustesse maximale vis-à-vis des technologies d'assistance plus anciennes) et `aria-modal="true"` toujours posés. Si `heading` est fourni : rendu d'un `<h2>` visible avec un `id` stable (`useId()`), associé via `aria-labelledby`. **Si `heading` est absent, aucun `aria-labelledby` n'est généré artificiellement** — c'est alors la responsabilité du consommateur de fournir son propre `aria-label` via le passthrough natif pour que le dialog conserve un nom accessible.
+
+Aucune animation en V1 (`globals.css` non modifié, aucune keyframe, aucun système de présence). `"use client"` obligatoire — hooks limités à `useRef`, `useEffect` et `useId`, aucun état interne superflu. Pas de `Context`, pas de store, pas de gestionnaire global : `Modal` reste une primitive contrôlée autonome.
+
 ## Règles React / Next.js
 
 - Server Components par défaut.
