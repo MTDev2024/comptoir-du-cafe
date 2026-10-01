@@ -24,6 +24,17 @@
 | `/commande/[reference]`          | Confirmation            | PrestaShop                            |
 | `/compte`                        | Compte                  | PrestaShop                            |
 
+## Pages légales (prévues, non créées)
+
+| Route                        | Contenu                       | Source principale |
+| ---------------------------- | ----------------------------- | ----------------- |
+| `/mentions-legales`          | Mentions légales              | config / contenu  |
+| `/politique-confidentialite` | Politique de confidentialité  | config / contenu  |
+| `/cgv`                       | Conditions générales de vente | config / contenu  |
+| `/politique-cookies`         | Politique cookies             | config / contenu  |
+
+Ces routes sont documentées pour une implémentation future. Tant que les pages correspondantes n'existent pas dans l'application, `Footer` ne doit créer aucun lien vers elles.
+
 ## Homepage
 
 Ordre cible :
