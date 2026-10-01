@@ -32,18 +32,18 @@
 - [x] Stack / Grid
 - [x] Button / Link
 - [x] form controls
-- [ ] Alert / Toast / Modal / Drawer
+- [x] Alert / Toast / Modal / Drawer
   - [x] Alert
   - [x] Toast
   - [x] Modal
-  - [ ] Drawer
+  - [x] Drawer
 - [ ] Breadcrumbs
 - [ ] Skeleton / EmptyState
 - [ ] Header / Footer
 
 **Critère :** système UI cohérent et accessible.
 
-**État : en cours.** `Container`, `Section`, `Stack`, `Grid` (`src/components/layout/`) et `Button`, `Link`, `Input`, `Select`, `Checkbox`, `Radio`, `FormField`, `Alert`, `Toast`, `Modal` (`src/components/ui/`) implémentés et vérifiés (`npm run lint`, `npm run typecheck`, `npm run build`). Autres éléments non commencés. Détails dans [`CURRENT-STATE.md`](./CURRENT-STATE.md).
+**État : en cours.** `Container`, `Section`, `Stack`, `Grid` (`src/components/layout/`) et `Button`, `Link`, `Input`, `Select`, `Checkbox`, `Radio`, `FormField`, `Alert`, `Toast`, `Modal`, `Drawer` (`src/components/ui/`) implémentés et vérifiés (`npm run lint`, `npm run typecheck`, `npm run build`). Groupe "Alert / Toast / Modal / Drawer" complet. Autres éléments non commencés. Détails dans [`CURRENT-STATE.md`](./CURRENT-STATE.md).
 
 ## Phase 3 — PrestaShop integration
 

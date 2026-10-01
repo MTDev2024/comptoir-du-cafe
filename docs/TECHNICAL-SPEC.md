@@ -144,6 +144,35 @@ type ModalProps = Omit<ComponentPropsWithoutRef<"dialog">, "open" | "onClose"> &
 
 Aucune animation en V1 (`globals.css` non modifié, aucune keyframe, aucun système de présence). `"use client"` obligatoire — hooks limités à `useRef`, `useEffect` et `useId`, aucun état interne superflu. Pas de `Context`, pas de store, pas de gestionnaire global : `Modal` reste une primitive contrôlée autonome.
 
+### Drawer : panneau latéral natif
+
+`Drawer` (`src/components/ui/Drawer.tsx`) reprend la même architecture que `Modal` (`<dialog>` natif, `showModal()`/`close()`, focus natif, scroll lock, bouton de fermeture local, `heading`/`aria-labelledby` conditionnels) pour un panneau positionné sur un bord de l'écran plutôt qu'une boîte centrée :
+
+```ts
+type DrawerSide = "left" | "right";
+
+type DrawerProps = Omit<ComponentPropsWithoutRef<"dialog">, "open" | "onClose"> & {
+  open: boolean;
+  onClose: () => void;
+  heading?: string;
+  side?: DrawerSide; // défaut "right"
+};
+```
+
+**Pourquoi `<dialog>` natif, encore** : exactement les mêmes raisons que pour `Modal` — focus trap, focus initial et restauration du focus natifs (aucun focus trap fait maison, aucune dépendance de focus management), pas de `createPortal` (rendu "top layer"), pas de risque de mismatch SSR/hydratation.
+
+**`side`** : seule prop ajoutée par rapport à `Modal`, justifiée par les usages réels visés (panier à droite, menu mobile à gauche) — `"left" | "right"` uniquement, défaut `"right"`. Pas de prop `width` : la largeur par défaut (pleine largeur sur mobile, plafonnée sur desktop via `w-full max-w-sm`) est définie dans le composant et reste surchargeable via `className`.
+
+**Comportement showModal/close, backdrop, fermeture** : identiques à `Modal` — un `useEffect` synchronise `open` avec l'état natif (`showModal()`/`close()` jamais redondants), un second écoute l'événement natif `close` comme point d'entrée unique vers `onClose()`. Escape, bouton de fermeture et clic sur le backdrop (`event.target === dialogRef.current`) passent tous par `dialog.close()`. Bouton de fermeture natif local (`<button type="button" aria-label="Fermer">`), non construit à partir de `Button`.
+
+**Scroll lock** : même principe que `Modal` (verrouillage `overflow` + compensation scrollbar + restauration exacte des valeurs inline précédentes), **implémenté localement dans `Drawer.tsx`**, sans extraction d'un hook partagé (`useScrollLock`) avec `Modal`. Avec seulement deux consommateurs à ce stade, l'extraction ajouterait un couplage entre deux primitives aujourd'hui indépendantes pour économiser une quinzaine de lignes — à reconsidérer seulement si un troisième composant a un besoin identique.
+
+**ARIA** : `role="dialog"` + `aria-modal="true"` toujours posés. Si `heading` est fourni, `<h2>` + `id` stable (`useId()`) + `aria-labelledby`. Si absent, aucun `aria-labelledby` généré artificiellement — responsabilité du consommateur de fournir `aria-label` via le passthrough natif, identique à `Modal`.
+
+**Aucune animation en V1** (`globals.css` non modifié, aucune keyframe, aucun système de présence, aucune dépendance). **Compromis UX à noter explicitement** : contrairement à `Modal`, le mouvement de glissement latéral fait partie de l'identité visuelle attendue d'un drawer — son absence est donc un compromis plus visible ici que pour `Modal`/`Toast`. Ce choix est volontaire pour cette V1 et pourra être réévalué plus tard si le besoin se confirme, sans qu'il soit nécessaire d'introduire un système de présence dès maintenant.
+
+Aucune abstraction commune (`BaseDialog`, `DialogPrimitive`, etc.) n'est créée avec `Modal` : les deux restent des primitives autonomes, `Modal.tsx` n'a pas été modifié pour cette étape.
+
 ## Règles React / Next.js
 
 - Server Components par défaut.
