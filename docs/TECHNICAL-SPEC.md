@@ -80,6 +80,20 @@ type FormFieldProps = {
 
 `FormField` n'injecte aucune prop dans `children` (pas de `cloneElement`) : le câblage `aria-describedby`/`aria-invalid` entre le contrôle et les ids déterministes `${id}-description`/`${id}-error` reste **explicite, à la charge du consommateur**. `required` est reflété à la fois par l'attribut natif sur le contrôle et par une indication visuelle dans `FormField`. Aucun `"use client"`, aucune validation métier, aucune gestion d'état de formulaire : ces composants restent des wrappers UI purs. La validation (Zod), les Server Actions et la soumission restent hors de ces composants.
 
+### Alert : message persistant
+
+`Alert` (`src/components/ui/Alert.tsx`) affiche un message persistant d'information, succès, avertissement ou erreur :
+
+```ts
+type AlertProps = ComponentPropsWithoutRef<"div"> & {
+  variant?: "info" | "success" | "warning" | "error"; // défaut "info"
+};
+```
+
+Fond teinté à faible opacité (`bg-{variant}/10`) + bordure gauche 4px pleine couleur du variant + texte en `foreground` — uniquement des tokens déjà définis, aucune nouvelle couleur. Pas d'icône intégrée, pas de bouton close, pas de titre séparé (un seul `children` libre). Composant présentationnel pur : aucun `"use client"`, aucun hook, aucune logique métier.
+
+**Accessibilité : `Alert` n'impose aucun rôle ARIA.** Ni `role="alert"` ni `role="status"` ne sont appliqués automatiquement selon la variante — le passthrough des attributs natifs (`ComponentPropsWithoutRef<"div">`) permet au consommateur de poser explicitement le rôle approprié à son contexte d'usage (`role="alert"`, `role="status"`, ou aucun rôle pour un message purement visuel/persistant). Ce choix est volontaire : `Alert` ne peut pas savoir, depuis le composant lui-même, si une instance donnée est statique au chargement de la page ou injectée dynamiquement — seul le consommateur connaît ce contexte.
+
 ## Règles React / Next.js
 
 - Server Components par défaut.
