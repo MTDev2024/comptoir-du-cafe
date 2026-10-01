@@ -25,9 +25,11 @@ export function HeaderShell({ transparentUntilScroll, children }: HeaderShellPro
   }, [transparentUntilScroll]);
 
   const isTransparent = transparentUntilScroll && !isScrolled;
+  const isCompact = transparentUntilScroll && isScrolled;
 
   const classes = [
-    "sticky top-0 z-40 w-full transition-colors",
+    "sticky top-0 z-40 w-full transition-[background-color,color,height] duration-300",
+    isCompact ? "h-[72px]" : "h-[88px]",
     isTransparent
       ? "bg-transparent text-foreground-on-dark"
       : "border-b border-border bg-background text-foreground",

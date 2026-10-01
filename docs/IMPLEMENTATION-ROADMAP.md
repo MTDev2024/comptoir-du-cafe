@@ -37,13 +37,13 @@
   - [x] Toast
   - [x] Modal
   - [x] Drawer
-- [ ] Breadcrumbs
-- [ ] Skeleton / EmptyState
-- [ ] Header / Footer
+- [x] Breadcrumbs
+- [x] Skeleton / EmptyState
+- [x] Header / Footer
 
 **Critère :** système UI cohérent et accessible.
 
-**État : en cours.** `Container`, `Section`, `Stack`, `Grid` (`src/components/layout/`) et `Button`, `Link`, `Input`, `Select`, `Checkbox`, `Radio`, `FormField`, `Alert`, `Toast`, `Modal`, `Drawer` (`src/components/ui/`) implémentés et vérifiés (`npm run lint`, `npm run typecheck`, `npm run build`). Groupe "Alert / Toast / Modal / Drawer" complet. Autres éléments non commencés. Détails dans [`CURRENT-STATE.md`](./CURRENT-STATE.md).
+**État : terminée.** `Container`, `Section`, `Stack`, `Grid` (`src/components/layout/`), `Button`, `Link`, `Input`, `Select`, `Checkbox`, `Radio`, `FormField`, `Alert`, `Toast`, `Modal`, `Drawer`, `Skeleton`, `EmptyState` (`src/components/ui/`), `Breadcrumbs`, `Header`, `Footer` (`src/components/navigation/`) implémentés et vérifiés (`npm run lint`, `npm run typecheck`, `npm run build`). Critère d'acceptation satisfait. Détails dans [`CURRENT-STATE.md`](./CURRENT-STATE.md).
 
 ## Phase 3 — PrestaShop integration
 

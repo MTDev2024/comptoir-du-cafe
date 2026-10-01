@@ -7,9 +7,10 @@ import type { NavItem } from "@/config/navigation";
 
 type MobileNavProps = {
   items: NavItem[];
+  secondaryItem?: NavItem;
 };
 
-export function MobileNav({ items }: MobileNavProps) {
+export function MobileNav({ items, secondaryItem }: MobileNavProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -54,6 +55,15 @@ export function MobileNav({ items }: MobileNavProps) {
               </li>
             ))}
           </ul>
+
+          {secondaryItem && (
+            <Link
+              href={secondaryItem.href}
+              className="text-body-sm text-foreground-muted focus-visible:outline-primary mt-16 block rounded-sm py-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              {secondaryItem.label}
+            </Link>
+          )}
         </nav>
       </Drawer>
     </>
