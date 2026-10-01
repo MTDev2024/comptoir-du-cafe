@@ -30,7 +30,7 @@
 - [x] Container
 - [x] Section
 - [x] Stack / Grid
-- [ ] Button / Link
+- [x] Button / Link
 - [ ] form controls
 - [ ] Alert / Toast / Modal / Drawer
 - [ ] Breadcrumbs
@@ -39,7 +39,7 @@
 
 **Critère :** système UI cohérent et accessible.
 
-**État : en cours.** `Container`, `Section`, `Stack` et `Grid` implémentés (`src/components/layout/`) et vérifiés (`npm run lint`, `npm run typecheck`, `npm run build`). Autres éléments non commencés. Détails dans [`CURRENT-STATE.md`](./CURRENT-STATE.md).
+**État : en cours.** `Container`, `Section`, `Stack`, `Grid` (`src/components/layout/`) et `Button`, `Link` (`src/components/ui/`) implémentés et vérifiés (`npm run lint`, `npm run typecheck`, `npm run build`). Autres éléments non commencés. Détails dans [`CURRENT-STATE.md`](./CURRENT-STATE.md).
 
 ## Phase 3 — PrestaShop integration
 

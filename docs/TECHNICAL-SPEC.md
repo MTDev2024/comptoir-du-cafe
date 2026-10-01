@@ -54,6 +54,13 @@ Aucune de ces primitives n'intègre les autres automatiquement — elles se comp
 
 Ces primitives restent volontairement de très petites briques et ne reproduisent aucune fonctionnalité déjà couverte par les utilitaires Tailwind (`gap-*`, `grid-cols-*`, `items-*`, `justify-*`, `flex-row`/`flex-col`, etc.) : aucune prop `direction`, `gap`, `columns`, `wrap`, `align` ou `justify` n'est ajoutée sur `Stack`/`Grid`. Toute variante de ce type se règle via `className`.
 
+### Button et Link : action vs navigation
+
+`Button` et `Link` (`src/components/ui/`) ont des responsabilités strictement séparées, jamais mélangées :
+
+- `Button` = **action** (soumission de formulaire, déclenchement côté client). Rend un `<button>`. Deux variantes seulement : `primary` (fond `primary`/texte `primary-foreground`) et `accent` (fond `accent`/texte `accent-foreground`). Pas de prop `size`, pas de prop `onClick`, pas de prop polymorphique, pas de slot icône dédié. `disabled` utilise l'attribut natif ; `loading` ajoute `aria-busy` et désactive le bouton. Reste un Server Component (pas de `"use client"`) : il ne porte aucune logique interactive propre. Les interactions client (gestion de `onClick`, état, etc.) sont portées par les composants clients qui utilisent `Button`, pas par `Button` lui-même.
+- `Link` = **navigation**. Rend `next/link` pour les destinations internes (`href` commençant par `/` ou `#`), un `<a>` natif pour tout le reste (externe, `mailto:`, `tel:`, etc.). Pas de prop `variant`, `size`, `external` ou `openInNewTab` ; aucune apparence de bouton. N'ajoute jamais `target="_blank"` automatiquement. Si un usage futur a besoin de `target="_blank"`, une indication accessible de l'ouverture dans un nouvel onglet doit l'accompagner (non implémenté tant qu'aucun besoin réel n'existe, car l'API actuelle de `Link` ne porte pas de prop `target`).
+
 ## Règles React / Next.js
 
 - Server Components par défaut.
